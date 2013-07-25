@@ -17,17 +17,23 @@ node puppet {
 
 
 
-vcsrepo { '/etc/puppet/modules/openstack':
+vcsrepo { 
+'/etc/puppet/modules/openstack':
   require => Package["puppet-server"],
   ensure   => latest,
   provider => git,
   source   => 'https://sstent:farscape5@github.com/stratustech/puppet-openstack.git',
   notify   => File["/etc/puppet/modules/openstack"];
+'/etc/puppet/modules/stratus':
+  require => Package["puppet-server"],
+  ensure   => latest,
+  provider => git,
+  source   => 'https://sstent:farscape5@github.com/stratustech/POC_ALPHA_stratusmodule.git';
 '/etc/puppet/manifests':
   require => [Package["puppet-server"],File['/etc/puppet/manifests']],
   ensure   => latest,
   provider => git,
-  source   => 'https://sstent:farscape5@github.com/stratustech/POC_ALPHA.git';
+  source   => 'https://sstent:farscape5@github.com/stratustech/POC_ALPHA_puppet_manifests.git';
   '/etc/puppet/modules/rabbitmq':
   require => Package["puppet-server"],
   ensure   => latest,

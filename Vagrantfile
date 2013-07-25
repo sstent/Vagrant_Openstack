@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
           controller_config.vm.network :forwarded_port, guest: 80, host: 8080
           controller_config.vm.provision :shell, :inline => "ip link set mtu 1546 dev eth2"
           controller_config.vm.provider "virtualbox" do |controller_vbox|
-            controller_vbox.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"] # eth3
-            controller_vbox.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"] # eth3
+            controller_vbox.customize ["modifyvm", :id, "--nicpromisc4", "allow-all", "--nictype4", "Am79C973"] # eth4
+            controller_vbox.customize ["modifyvm", :id, "--nicpromisc3", "allow-all", "--nictype3", "Am79C973"] # eth3
           end
 
 
@@ -35,11 +35,12 @@ Vagrant.configure("2") do |config|
           compute1_config.vm.hostname = "compute1.vagrant.info"
           compute1_config.vm.network :private_network, ip: "192.168.33.12"  #eth1 MGMT
           compute1_config.vm.network :private_network, ip: "10.10.1.12" #eth2 VM Traffic
-          compute1_config.vm.provision :shell, :inline => "ip link set mtu 1546 dev eth2"
-          compute1_config.vm.provision :shell, :inline => "ip link set eth2 promisc on"
+          #compute1_config.vm.provision :shell, :inline => "ip link set mtu 1546 dev eth2"
+          #compute1_config.vm.provision :shell, :inline => "ip link set eth2 promisc on"
 
           compute1_config.vm.provider "virtualbox" do |compute1_vbox|
-            compute1_vbox.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"] # eth2
+            compute1_vbox.customize ["modifyvm", :id, "--nicpromisc2", "allow-all", "--nictype2", "Am79C973"] # eth2
+            compute1_vbox.customize ["modifyvm", :id, "--nicpromisc3", "allow-all", "--nictype3", "Am79C973"] # eth3
             compute1_vbox.customize ["modifyvm", :id, "--cpus", 4]
             compute1_vbox.customize ["modifyvm", :id, "--memory", 2048]
           end
